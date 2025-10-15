@@ -1,23 +1,18 @@
 import streamlit as st
 import numpy as np
-import matplotlib.pyplot as plt
+import pandas as pd
 
-# Заглавие
 st.title("Хистограма на случайни числа (0 - 69)")
 
-# Генериране на случайни числа
-num_values = st.slider("Брой случайни стойности:", min_value=10, max_value=1000, value=100)
+# Плъзгач за броя стойности
+num_values = st.slider("Брой стойности:", 10, 1000, 100)
+
+# Генериране на данни
 data = np.random.randint(0, 70, size=num_values)
 
-# Показване на генерираните данни
-st.write("Генерирани числа:", data)
+# Преобразуване в pandas серия и броене на честоти
+hist_data = pd.Series(data).value_counts().sort_index()
 
-# Създаване на хистограма
-fig, ax = plt.subplots()
-ax.hist(data, bins=range(0, 71, 5), edgecolor='black')  # стъпка през 5
-ax.set_title("Хистограма на случайни цели числа")
-ax.set_xlabel("Стойности")
-ax.set_ylabel("Честота")
+# Показване като хистограма (бар чарт)
+st.bar_chart(hist_data)
 
-# Показване в Streamlit
-st.pyplot(fig)
